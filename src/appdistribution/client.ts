@@ -197,7 +197,7 @@ export class AppDistributionClient {
   }
 
   async listGroups(projectName: string): Promise<ListGroupsResponse> {
-    const groups: ListGroupsResponse = {
+    const listGroupsResponse: ListGroupsResponse = {
       groups: [],
     };
 
@@ -211,13 +211,13 @@ export class AppDistributionClient {
         const apiResponse = await client.get<ListGroupsResponse>(`${projectName}/groups`, {
           queryParams,
         });
-        groups.groups.push(...(apiResponse.body.groups || []));
+        listGroupsResponse.groups.push(...(apiResponse.body.groups || []));
         pageToken = apiResponse.body.nextPageToken;
       } catch (err) {
         throw new FirebaseError(`Client failed to list groups ${err}`);
       }
     } while (pageToken);
-    return groups;
+    return listGroupsResponse;
   }
 
   async createGroup(projectName: string, displayName: string, alias?: string): Promise<Group> {
