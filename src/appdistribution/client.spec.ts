@@ -1,15 +1,16 @@
 import { expect } from "chai";
+import { join } from "path";
 import * as fs from "fs-extra";
 import * as nock from "nock";
 import { rmSync } from "node:fs";
 import * as sinon from "sinon";
 import * as tmp from "tmp";
 
-import { appDistributionOrigin } from "../api";
-import { FirebaseError } from "../error";
 import { AppDistributionClient } from "./client";
-import { Distribution } from "./distribution";
 import { BatchRemoveTestersResponse, Group, TestDevice } from "./types";
+import { appDistributionOrigin } from "../api";
+import { Distribution } from "./distribution";
+import { FirebaseError } from "../error";
 
 tmp.setGracefulCleanup();
 
