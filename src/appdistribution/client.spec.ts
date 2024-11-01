@@ -1,8 +1,7 @@
 import { expect } from "chai";
 import * as fs from "fs-extra";
 import * as nock from "nock";
-import { join } from "path";
-import * as rimraf from "rimraf";
+import { rmSync } from "node:fs";
 import * as sinon from "sinon";
 import * as tmp from "tmp";
 
@@ -36,7 +35,7 @@ describe("distribution", () => {
   });
 
   after(() => {
-    rimraf.sync(tempdir.name);
+    rmSync(tempdir.name, { recursive: true });
   });
 
   describe("addTesters", () => {
