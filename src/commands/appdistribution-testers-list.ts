@@ -3,6 +3,7 @@ import { AppDistributionClient } from "../appdistribution/client";
 import { getProjectName } from "../appdistribution/options-parser-util";
 import { ListTestersResponse, Tester } from "../appdistribution/types";
 import { Command } from "../command";
+import { FirebaseError } from "../error";
 import { logger } from "../logger";
 import { Options } from "../options";
 import { requireAuth } from "../requireAuth";
@@ -20,9 +21,12 @@ export const command = new Command("appdistribution:testers:list [group]")
     const spinner = ora("Preparing the list of your App Distribution testers").start();
     try {
       testersResponse = await appDistroClient.listTesters(projectName, group);
-    } catch (err) {
+    } catch (err: any) {
       spinner.fail();
-      throw err;
+      throw new FirebaseError("Failed to list testers.", {
+        exit: 1,
+        original: err,
+      });
     }
     spinner.succeed();
     const testers = testersResponse.testers ?? [];
@@ -34,7 +38,7 @@ export const command = new Command("appdistribution:testers:list [group]")
 /**
  * Prints a table given a list of testers
  */
-export function printTestersTable(testers: Tester[]): void {
+function printTestersTable(testers: Tester[]): void {
   const tableHead = ["Name", "Display Name", "Last Activity Time", "Groups"];
 
   const table = new Table({

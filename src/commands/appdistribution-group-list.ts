@@ -21,9 +21,12 @@ export const command = new Command("appdistribution:group:list")
     const spinner = ora("Preparing the list of your App Distribution Groups").start();
     try {
       groupsResponse = await appDistroClient.listGroups(projectName);
-    } catch (err) {
+    } catch (err: any) {
       spinner.fail();
-      throw new FirebaseError(`Failed to list groups ${err}`);
+      throw new FirebaseError("Failed to list groups.", {
+        exit: 1,
+        original: err,
+      });
     }
     spinner.succeed();
     const groups = groupsResponse.groups ?? [];
